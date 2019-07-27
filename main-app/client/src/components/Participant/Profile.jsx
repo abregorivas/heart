@@ -8,27 +8,33 @@ import Citations from './components/Citations'
 import Notes from './components/Notes'
 import Status from './components/Status'
 import { useFetch } from '../../hooks/useFetch'
+import { CitationsX } from './components/Citations'
 
 const useStyles = makeStyles(theme => ({
   root: { padding: theme.spacing(2), backgroundColor: '#f3f7fc' },
   link: {
-    color: "#252525",
+    color: '#252525',
     cursor: 'pointer',
     textTransform: 'uppercase',
     fontSize: 12,
     fontWeight: 600,
     '&:hover': {
       color: '#428FE2',
-      textDecoration: 'none'
+      textDecoration: 'none',
     },
   },
-    arrowLeft: {
-      display: 'inline-block',
-      marginBottom: theme.spacing(1),
-      marginLeft: theme.spacing(1)
-    },
-
+  arrowLeft: {
+    display: 'inline-block',
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+  },
 }))
+
+/*
+refactored to use fetch hook but still pending connecting the crud actions
+to each form.
+Also removed sass requirement and using material-ui grid
+ */
 
 const ParticipantProfile = props => {
   const [state, fetchData, dispatch] = useFetch(
@@ -55,6 +61,7 @@ const ParticipantProfile = props => {
             <Grid item xs={8}>
               <Notes user={state.data[0]} />
               <Citations user={state.data[0]} />
+              <CitationsX user={state.data[0]} />
             </Grid>
             <Grid item xs={4}>
               <Status user={state.data[0]} />
@@ -62,7 +69,6 @@ const ParticipantProfile = props => {
           </Grid>
         </Container>
       )}
-      {JSON.stringify(state)}
     </div>
   )
 }
