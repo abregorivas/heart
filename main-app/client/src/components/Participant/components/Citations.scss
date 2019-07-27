@@ -1,4 +1,4 @@
-@import "styles/shared.scss";
+//@import 'styles/shared.scss';
 
 .citations-container {
   grid-area: citation;
@@ -36,7 +36,7 @@
     grid-gap: 20px;
     background-color: $palest-grey;
     padding: 15px 20px;
-    width: calc(100% + 30px);
+    // width: calc(100% + 30px);
     margin-left: -15px;
     margin-top: -15px;
     margin-bottom: 20px;

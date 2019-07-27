@@ -1,7 +1,6 @@
 import axios from 'axios'
 //import { API_ENDPOINT } from 'get_uri';
 import { API_BASE_URL } from '../config/url_config'
-
 import { UserAuth } from '../utilities/auth'
 
 const getParticipant = id => {

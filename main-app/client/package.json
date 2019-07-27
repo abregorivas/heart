@@ -14,6 +14,8 @@
     "enzyme-adapter-react-16": "^1.8.0",
     "formik": "^1.5.7",
     "husky": "^2.4.1",
+    "escape-string-regexp": "^2.0.0",
+    "formik": "1.5.7",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "lint-staged": "^8.2.1",
@@ -30,7 +32,9 @@
     "react-test-renderer": "^16.7.0",
     "source-map-explorer": "^2.0.1",
     "styled-components": "^4.2.0",
-    "validator": "^10.11.0"
+    "uuid": "3.3.2",
+    "validator": "^10.11.0",
+    "yup": "0.27.0"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",

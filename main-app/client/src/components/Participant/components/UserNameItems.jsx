@@ -1,5 +1,6 @@
 import React from 'react'
 import './UserNameItems.scss'
+import _ from 'lodash'
 
 const UserNameItems = ({ editing, namesInfo, handleChange }) => {
   return (

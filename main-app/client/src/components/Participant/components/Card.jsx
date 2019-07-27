@@ -84,66 +84,83 @@ export default Card
 //     //   this.initializeFormState(this.props.user);
 //     // }
 //   }
-
-//   toggleEditMode = () => {
-//     let { editing, localUserInfo, changeInFormState } = this.state;
-//     if (this.props.user) {
-//       let { id } = this.props.user;
-//       if (editing && changeInFormState) {
-//         this.postFormData(id, localUserInfo);
-//       }
-//     }
-//     this.setState({
-//       editing: !editing,
-//       btnText: !editing ? "Save" : "Edit",
-//       changeInFormState: false
-//     });
-//   };
-//   onSuccess = data => {
-//     this.initializeFormState(data);
-//     this.setState({ loading: false });
-//   };
-//   onError = errorMessage => {
-//     this.setState({ error: errorMessage, loading: false });
-//   };
-//   postFormData = (id, formData) => {
-//     this.setState({ loading: true, error: null });
-//     return updateParticipant(
-//       { id, data: formData },
-//       this.onSuccess,
-//       this.onError
-//     );
-//   };
-//   editHandler = e => {
-//     let { name, value } = e.currentTarget;
-//     let { localUserInfo } = this.state;
-
-//     if (name === "aka") {
-//       value = value.includes(",") ? value.split(",") : [value];
-//     }
-
-//     localUserInfo[name] = value;
-//     this.setState({ localUserInfo, changeInFormState: true });
-//   };
-
-//   render() {
-//     let { editing, btnText } = this.state;
-//     let { localUserInfo } = this.props;
-//     return (
-//       <div className="user-card--container">
-// <UserNameItems
-//   localUserInfo={localUserInfo}
-//   editHandler={this.editHandler}
-//   toggleEditMode={this.toggleEditMode}
-//   btnText={btnText}
-//   editing={editing}
-// />;
-//         <UserInfoItems
-//           localUserInfo={localUserInfo}
-//           editHandler={this.editHandler}
+//         <Button
+//           handleClick={
+//             editing ? e => handleSubmit(e) : () => toggleEdit("card")
+//           }
 //           editing={editing}
 //         />
 //       </div>
-//     );
-//   }
-// }
+//       <UserInfoItems
+//         editing={editing}
+//         profileInfo={profileInfo}
+//         handleChange={handleChange}
+//       />
+//     </div>
+//   );
+// };
+//
+// export default Card;
+//
+// //   toggleEditMode = () => {
+// //     let { editing, localUserInfo, changeInFormState } = this.state;
+// //     if (this.props.user) {
+// //       let { id } = this.props.user;
+// //       if (editing && changeInFormState) {
+// //         this.postFormData(id, localUserInfo);
+// //       }
+// //     }
+// //     this.setState({
+// //       editing: !editing,
+// //       btnText: !editing ? "Save" : "Edit",
+// //       changeInFormState: false
+// //     });
+// //   };
+// //   onSuccess = data => {
+// //     this.initializeFormState(data);
+// //     this.setState({ loading: false });
+// //   };
+// //   onError = errorMessage => {
+// //     this.setState({ error: errorMessage, loading: false });
+// //   };
+// //   postFormData = (id, formData) => {
+// //     this.setState({ loading: true, error: null });
+// //     return updateParticipant(
+// //       { id, data: formData },
+// //       this.onSuccess,
+// //       this.onError
+// //     );
+// //   };
+// //   editHandler = e => {
+// //     let { name, value } = e.currentTarget;
+// //     let { localUserInfo } = this.state;
+//
+// //     if (name === "aka") {
+// //       value = value.includes(",") ? value.split(",") : [value];
+// //     }
+//
+// //     localUserInfo[name] = value;
+// //     this.setState({ localUserInfo, changeInFormState: true });
+// //   };
+//
+// //   render() {
+// //     let { editing, btnText } = this.state;
+// //     let { localUserInfo } = this.props;
+// //     return (
+// //       <div className="user-card--container">
+// // <UserNameItems
+// //   localUserInfo={localUserInfo}
+// //   editHandler={this.editHandler}
+// //   toggleEditMode={this.toggleEditMode}
+// //   btnText={btnText}
+// //   editing={editing}
+// // />;
+// //         <UserInfoItems
+// //           localUserInfo={localUserInfo}
+// //           editHandler={this.editHandler}
+// //           editing={editing}
+// //         />
+// //       </div>
+// //     );
+// //   }
+// // }
