@@ -40,6 +40,14 @@ const FormDropdown = ({
         value={age}
         onChange={handleonChange}
         input={<FormInput id={id} label={label} field={field} {...props} />}
+      />
+      <InputLabel htmlFor={id} className={classes.label}>
+        {label}
+      </InputLabel>
+      <Select
+        value={age}
+        onChange={handleonChange}
+        input={<FormInput id={id} label={label} field={field} {...props} />}
       >
         <option value="" />
         <option value={10}>Ten</option>
