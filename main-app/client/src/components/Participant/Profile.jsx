@@ -56,37 +56,66 @@ const ParticipantProfile = props => {
   )
   const classes = useStyles()
   return (
-    <div className={classes.root}>
-      {state.isLoading ? (
-        <Loader />
-      ) : (
-        <Container>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Link to="/participants" className={classes.link}>
-                {state.isError && <Error error={state.isError} />}
-                <i className="fas fa-arrow-left"></i>
-                <span className={classes.arrowLeft}>Back to Index</span>
-              </Link>
+    <>
+      <Page blue>
+        {state.isLoading && <Loader />}
+        {state.isError && <Error error={state.isError} />}
+        {!state.isLoading && state.data && (
+          <Container>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <a href={'/participants'} className="user-profile--nav">
+                  <i className="fas fa-arrow-left"></i>
+                  Back to Index
+                </a>
+              </Grid>
+              <Grid item xs={12}>
+                <Card user={state.data[0]} />
+              </Grid>
+              <Grid item xs={8}>
+                <Notes user={state.data[0]} />
+                <Citations user={state.data[0]} />
+              </Grid>
+              <Grid item xs={4}>
+                <Status user={state.data[0]} />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Card user={state.data[0]} />
+          </Container>
+        )}
+        {JSON.stringify(state)}
+      </Page>
+      <div className={classes.root}>
+        {state.isLoading ? (
+          <Loader />
+        ) : (
+          <Container>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Link to="/participants" className={classes.link}>
+                  {state.isError && <Error error={state.isError} />}
+                  <i className="fas fa-arrow-left"></i>
+                  <span className={classes.arrowLeft}>Back to Index</span>
+                </Link>
+              </Grid>
+              <Grid item xs={12}>
+                <Card user={state.data[0]} />
+              </Grid>
+              <Grid item xs={8}>
+                <Notes user={state.data[0]} />
+                <Citations user={state.data[0]} />
+                <CitationsX user={state.data[0]} />
+              </Grid>
+              <Grid item xs={4}>
+                <Status user={state.data[0]} />
+              </Grid>
             </Grid>
-            <Grid item xs={8}>
-              <Notes user={state.data[0]} />
-              <Citations user={state.data[0]} />
-              <CitationsX user={state.data[0]} />
-            </Grid>
-            <Grid item xs={4}>
-              <Status user={state.data[0]} />
-            </Grid>
-          </Grid>
-        </Container>
-      )}
-    </div>
+          </Container>
+        )}
+      </div>
+    </>
   )
 }
-//
+
 // class ParticipantProfile extends React.Component {
 //   state = {
 //     participant: {},
@@ -245,10 +274,10 @@ const ParticipantProfile = props => {
 //     );
 //   }
 // }
-
-export default ParticipantProfile
-
+//
+// export default ParticipantProfile
+//
 // <Citations user={participant} />
 // <Status user={participant} />
-
+//
 // {error && <Error error={error} />}
