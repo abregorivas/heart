@@ -1,103 +1,56 @@
-import { useReducer, useEffect } from "react";
-import axios from 'axios';
-import { UserAuth } from '../utilities/auth';
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { UserAuth } from '../utilities/auth'
 import { API_BASE_URL } from '../config/url_config'
+import _ from 'lodash'
 
-const dataFetchReducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_DATA':
-      return {
-        data: action.payload,
-        isLoading: false,
-        isError: false,
-        initialLoad: false
-      };
-    case 'ADD_DATA':
-      return {
-        data: state.data.concat(action.payload),
-        isLoading:false,
-        isError: false
-      };
-    case 'UPDATE_DATA':
-      return {
-        data: state.data.map(x => x.id === action.id ? action.payload[0] : x),
-        isLoading: false,
-        isError: false,
-      };
-    case 'DELETE_DATA':
-      return state.filter(x => x.id !== action.id);
-    case 'FETCH_FAILURE':
-      return {
-        ...state,
-        isLoading: false,
-        isError: true,
-      };
-    default:
-      throw new Error(`Unhandled type: ${action.type}`);
-  }
-};
+const useFetch = (method, url) => {
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [apiData, setApiData] = useState([])
 
-const useFetch = (url) =>{
-  const [state, dispatch] = useReducer(dataFetchReducer, {
-    initialLoad: true, isLoading: true, isError: false, data: []
-  });
-
-  const fetchData = (method, url, formData, headers) => {
-    return axios({
+  const fetchUrl = (method, url, data) => {
+    axios({
       method: method,
       url: `${API_BASE_URL}/${url}`,
-      data: formData ? formData: null,
+      data: data ? data : null,
       timeout: method === 'get' ? 3000 : 5000,
-      headers: { Authorization: `Bearer ${UserAuth.getAuthToken()}` }
+      headers: { Authorization: `Bearer ${UserAuth.getAuthToken()}` },
     })
       .then(res => {
-        switch (method) {
-          case 'get':
-            dispatch({type: 'FETCH_DATA', payload: res.data});
-            break;
-          case 'post':
-            dispatch({type: 'ADD_DATA', payload: formData});
-            break;
-          case 'put':
-            // need to review what backend will actually use (should be an id)
-            dispatch({type: 'UPDATE_DATA', payload: res.data.data, id: formData.id});
-            break;
-          case 'delete':
-            // need to review what backend will actually use (should be an id)
-            dispatch({type: 'DELETE_DATA', id: formData.Id});
-            break;
-          default:
-            dispatch({})
+        if (method === 'get') {
+          setApiData(res.data)
+        } else if (method === 'put') {
+          let newRecord = res.data.data[0]
+
+          let x = apiData.reduce((prev, cur, index) => {
+            if (index === _.findIndex(apiData, o => o.id === newRecord.id)) {
+              prev.push(newRecord)
+            } else {
+              prev.push(cur)
+            }
+            return prev
+          }, [])
+
+          setApiData(x)
+        } else if (method === 'delete') {
+          setApiData(apiData.filter(x => x.id !== data.id))
         }
+        setLoading(false)
       })
-      .catch(error => {
-        if(error.code === 'ECONNABORTED') {
-          error.message = 'The request took too long - please try again later.'
+      .catch(err => {
+        if (err.code === 'ECONNABORTED') {
+          err.message = 'The request took too long - please try again later.'
         }
-        dispatch({ type: 'FETCH_FAILURE', payload: error});
+        setError(err)
       })
-  };
+  }
 
-  useEffect (() => {
-    // common problem in React that component state is set even though the
-    // component got already unmounted (e.g. due to navigating away with React Router).
-    // "didCancel" flag addresses that issue
+  useEffect(() => {
+    fetchUrl(method, url)
+  }, [])
 
-    let didCancel = false;
-    if (!didCancel) {
-      if(state.initialLoad) {
-        fetchData('get', url);
-      } else {
-        fetch()
-      }
-    }
+  return [{ loading, apiData, error }, fetchUrl]
+}
 
-    // clean up when component un-mounts
-    return () => didCancel = true;
-
-  },[url]);
-
-  return [state, fetchData, dispatch]
-};
-
-export { useFetch };
+export { useFetch }

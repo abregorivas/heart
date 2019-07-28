@@ -1,120 +1,94 @@
 import React from 'react'
+import { Formik } from 'formik'
+import { useFetch } from '../../../hooks/useFetch'
 import { DynamicFormContainer } from 'components/DynamicForm'
 import CitationsQA from './Citations.data'
-// import getCitations from "api/getCitations.api";
-// import updateCitation from "api/updateCitation.api";
-// import deleteCitation from "api/deleteCitation.api";
-import addCitation from 'api/addCitation.api'
-import SearchBar from './SearchBar.js'
-import Violations from './Violations.js'
-import Button from './Button.js'
 import './Citations.scss'
+import { useDataApi } from '../../../hooks/useAxios'
 
-const Citations = ({
-  citations,
-  editing,
-  toggleEdit,
-  handleDelete,
-  handleSubmit,
-  handleViolation,
-}) => {
+import violationCodes from '../../../api/violationCodes.api'
+import Search from '../../Shared/Search'
+import Violations from './Violations'
+// import Violations from './Violations'
+
+const Citations = ({ user }) => {
+  // const [citations, fetchUrl]= useFetch('get', `participants/${user.id}/citations`)
+  const [state, fetchData, dispatch] = useDataApi(
+    `participants/${user.id}/citations`
+  )
+  const postFormData = formData => {
+    formData.participant_id ? updateCitation(formData) : addCitation(formData)
+  }
+
+  const deleteCitation = citation => {
+    let data = { id: citation.participant_id, citationId: citation.id }
+    fetchData('delete', `citations/${citation.id}`, data)
+  }
+
+  const updateCitation = formData => {
+    let data = {
+      id: formData.participant_id,
+      data: formData,
+      citationId: formData.id,
+    }
+    fetchData('put', `citations/${formData.id}`, data)
+  }
+
+  const addCitation = formData => {
+    let data = { id: user.id, data: formData }
+    // fetchData('post', `participants/${user.id}/citations`, data )
+  }
+  const handleViolationSelection = () => {
+    console.log('Selection Clicked')
+  }
+
   return (
     <section className="citations-container">
       <div className="citations-title">Citations</div>
       <div className="citations-form-container">
-        {citations.map(citation => (
-          <div key={citation.id} className="citations-form">
-            <div className="form-QA--row">
-              <div className="form-QA">
-                <label className="form-question">Citation No.</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={citation.citation_number}
-                  disabled={
-                    editing.who == `citations${citation.id}` ? true : false
-                  }
-                  onChange={() => handleSubmit()}
-                />
-              </div>
-              <div className="form-QA">
-                <label className="form-question">Court Code</label>
-                <div>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={citation.court_code}
-                  />
-                </div>
-              </div>
-              <div className="form-QA">
-                <label className="form-question">Status</label>
-                <div>
-                  <select
-                    type="text"
-                    className="form-input"
-                    value={citation.citation_status}
-                  >
-                    <option value="volvo">Not Sent</option>
-                    <option value="saab">Sent</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <Violations
-              disabled={editing.who == `citations${citation.id}` ? true : false}
-              violations={citation.violations}
-            />
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              {editing.who == `citations${citation.id}` ? (
-                <SearchBar
-                  citationNum={citation.citation_number}
-                  handleViolation={handleViolation}
-                />
-              ) : null}
-              <Button
-                handleClick={
-                  editing.who == `citations${citation.id}`
-                    ? e => handleSubmit(e)
-                    : () => toggleEdit(`citations${citation.id}`)
-                }
-                editing={
-                  editing.who == `citations${citation.id}` ? true : false
-                }
+        {state.isLoading ? (
+          <h1>...Loading</h1>
+        ) : (
+          state.data.map(citation => (
+            <div key={citation.id} className="citations-form">
+              <DynamicFormContainer
+                key={`${citation.participant_id}_${citation.id}`}
+                initialData={citation}
+                questions={CitationsQA}
+                editableMode={true}
+                onSubmit={postFormData}
+                onDelete={() => deleteCitation(citation)}
               />
+              <br />
+              <br />
+              <div>
+                <Violations violations={citation.violations} />
+                <Search
+                  searchList={violationCodes}
+                  handleSelection={handleViolationSelection}
+                  placeholder={'Search Violations'}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
+      <button className="citation-addnew--button">+Add New</button>
+      {/*<p>{JSON.stringify(state)}</p>*/}
     </section>
   )
 }
 
 export default Citations
-// <DynamicFormContainer
-//   key={`${citation.participant_id}_${citation.id}`}
-//   initialData={citation}
-//   questions={CitationsQA}
-//   editableMode={true}
-//   onSubmit={handleSubmit}
-//   onDelete={handleDelete}
-// />
 
-//   }
-//   }
-//   )}
-// ) : (
-//   <div key={-1} className="citations-form">
-//     <DynamicFormContainer
-//       questions={CitationsQA}
-//       editableMode={true}
-//       onSubmit={handleSubmit}
-//       onDelete={handleDelete}
-//     />
-//   </div>
-// )}
+// import { API_BASE_URL } from '../../../config/url_config'
+// import getCitations from "api/getCitations.api";
+// import updateCitation from "api/updateCitation.api";
+// import deleteCitation from "api/deleteCitation.api";
+// import addCitation from "api/addCitation.api";
+// <br/>
 
-// class Citationss extends React.Component {
+// class Citations extends React.Component {
 //   constructor(props) {
 //     super(props);
 //     this.state = {
@@ -128,48 +102,50 @@ export default Citations
 //     // fetch all of users citations
 //     if (prevProps.user !== this.props.user) {
 //       if (this.props.user.id) {
-//         this.fetchUserCitations();
+//         this.fetchUserCitations()
 //       }
 //     }
 //   };
-
+//
 //   fetchUserCitations = () => {
 //     let userId = this.props.user.id;
 //     this.setState({ userId });
 //     return getCitations(userId, this.onSuccess, this.onError);
-//   };
-
+//   }
+//
 //   onSuccess = data => {
 //     this.setState({ loading: false, citations: data });
 //   };
 //   onError = errorMessage => {
 //     this.setState({ error: errorMessage, loading: false });
-//     return this.fetchUserCitations();
+//     return this.fetchUserCitations()
 //   };
-//   postFormData = formData => {
-//     this.setState({ loading: true, error: null });
-//     let { userId } = this.state;
-//     if (formData.participant_id) {
-//       return updateCitation(
-//         { id: userId, data: formData, citationId: formData.id },
-//         this.onSuccess,
-//         this.onError
-//       );
-//     }
-//     return addCitation(
-//       { id: userId, data: formData },
+
+// postFormData = formData => {
+//   this.setState({ loading: true, error: null });
+//   let { userId } = this.state;
+//   if (formData.participant_id) {
+//     return updateCitation(
+//       { id: userId, data: formData, citationId: formData.id },
 //       this.onSuccess,
 //       this.onError
 //     );
-//   };
+//   }
+//   return addCitation(
+//       { id: userId, data: formData },
+//       this.onSuccess,
+//       this.onError
+//   );
+// };
+
 //   deleteCitation = citationId => {
 //     this.setState({ loading: true, error: null });
 //     console.log(citationId);
 //     return;
 //     // return deleteCitation(
-//     //   { id: this.state.userId, citationId },
-//     //   this.onSuccess,
-//     //   this.onError
+//       { id: this.state.userId, citationId },
+//       this.onSuccess,
+//       this.onError
 //     // );
 //   };
 //   renderCitations = () => {
@@ -184,12 +160,12 @@ export default Citations
 //         />
 //       </div>
 //     );
-
+//
 //     if (citations.length === 0) {
 //       return emptyForm;
 //     }
-
-//     let multipleCitations = citations.map(citation => {
+//
+//     let multipleCitations = citations.map((citation) => {
 //       return (
 //         <div key={citation.id} className="citations-form">
 //           <DynamicFormContainer
@@ -215,3 +191,5 @@ export default Citations
 //     );
 //   }
 // }
+
+// export default Citations;

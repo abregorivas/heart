@@ -19,7 +19,7 @@ const getCitations = (id, successFn, errorFn) => {
     })
     .then(res => {
       let { data } = res
-      // successFn(data);
+      successFn(data)
       return res
     })
     .catch(err => {
@@ -28,9 +28,17 @@ const getCitations = (id, successFn, errorFn) => {
       if (err.code === 'ECONNABORTED') {
         message = 'The request took too long - please try again later.'
       }
-      // errorFn(message);
+      errorFn(message)
       return err
     })
 }
 
 export default getCitations
+// {
+//   id: ,
+// citation_number:"",
+//   court_code:"",
+//   violations:[],
+//   citation_status:"",
+//   created_at:"","updated_at":"2019-07-02T00:41:34.263Z","participant_id":1
+// }
