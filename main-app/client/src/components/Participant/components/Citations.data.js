@@ -1,104 +1,104 @@
 const violationStyles = {
   control: styles => ({
     ...styles,
-    border: '1px solid #e6e6e6',
-    boxShadow: 'inset 0 0 3px #e6e6e6',
-    borderRadius: '2px',
-    backgroundColor: 'white',
+    border: "1px solid #e6e6e6",
+    boxShadow: "inset 0 0 3px #e6e6e6",
+    borderRadius: "2px",
+    backgroundColor: "white"
   }),
   option: (provided, state) => ({
-    ...provided,
+    ...provided
   }),
   multiValue: (styles, { data }) => {
     return {
       ...styles,
-      display: 'none',
-    }
-  },
-}
+      display: "none"
+    };
+  }
+};
 
 const courtStyles = {
   control: (styles, state) => ({
     ...styles,
-    padding: '2px',
-    paddingLeft: '0px',
-    marginTop: '5px',
-    border: '1px solid #e6e6e6',
-    boxShadow: 'inset 0 0 3px #e6e6e6',
-    borderRadius: '2px',
-    backgroundColor: 'white',
+    padding: "2px",
+    paddingLeft: "0px",
+    marginTop: "5px",
+    border: "1px solid #e6e6e6",
+    boxShadow: "inset 0 0 3px #e6e6e6",
+    borderRadius: "2px",
+    backgroundColor: "white"
   }),
   option: (provided, state) => ({
-    ...provided,
-  }),
-}
+    ...provided
+  })
+};
 
 const CitationsQA = [
   {
     row: [
       {
-        text: 'Citation No.',
-        input_type: 'text',
-        field_name: 'citation_number',
-        placeholder: 'C11111',
-        optional: true,
+        text: "Citation No.",
+        input_type: "text",
+        field_name: "citation_number",
+        placeholder: "C11111",
+        optional: true
       },
       {
-        text: 'Court Code',
-        input_type: 'dropdown',
-        field_name: 'court_code',
-        placeholder: 'Court',
+        text: "Court Code",
+        input_type: "dropdown",
+        field_name: "court_code",
+        placeholder: "Court",
         customStyles: courtStyles,
         options: [
-          { text: 'ALH' },
-          { text: 'ATP' },
-          { text: 'BF' },
-          { text: 'BH' },
-          { text: 'BUR' },
-          { text: 'CIT' },
-          { text: 'COM' },
-          { text: 'CC' },
-          { text: 'DOW' },
-          { text: 'ELA' },
-          { text: 'ELM' },
-          { text: 'GLN' },
-          { text: 'HP' },
-          { text: 'ING' },
-          { text: 'LB' },
-          { text: 'LAA' },
-          { text: 'LAX' },
-          { text: 'CHA' },
-          { text: 'LAM' },
-          { text: 'LAS' },
-          { text: 'LAP' },
-          { text: 'LAV' },
-          { text: 'LC' },
-          { text: 'LYN' },
-          { text: 'MAL' },
-          { text: 'NEW' },
-          { text: 'NK' },
-          { text: 'PAS' },
-          { text: 'POM' },
-          { text: 'SBA' },
-          { text: 'SNI' },
-          { text: 'SM' },
-          { text: 'SG' },
-          { text: 'TOR' },
-          { text: 'WC' },
-          { text: 'WH' },
+          { text: "ALH" },
+          { text: "ATP" },
+          { text: "BF" },
+          { text: "BH" },
+          { text: "BUR" },
+          { text: "CIT" },
+          { text: "COM" },
+          { text: "CC" },
+          { text: "DOW" },
+          { text: "ELA" },
+          { text: "ELM" },
+          { text: "GLN" },
+          { text: "HP" },
+          { text: "ING" },
+          { text: "LB" },
+          { text: "LAA" },
+          { text: "LAX" },
+          { text: "CHA" },
+          { text: "LAM" },
+          { text: "LAS" },
+          { text: "LAP" },
+          { text: "LAV" },
+          { text: "LC" },
+          { text: "LYN" },
+          { text: "MAL" },
+          { text: "NEW" },
+          { text: "NK" },
+          { text: "PAS" },
+          { text: "POM" },
+          { text: "SBA" },
+          { text: "SNI" },
+          { text: "SM" },
+          { text: "SG" },
+          { text: "TOR" },
+          { text: "WC" },
+          { text: "WH" }
         ],
-        optional: true,
+        optional: true
       },
       {
-        text: 'Status',
-        input_type: 'dropdown',
-        field_name: 'citation_status',
-        placeholder: 'Status',
+        text: "Status",
+        input_type: "dropdown",
+        field_name: "citation_status",
+        placeholder: "Status",
         customStyles: courtStyles,
-        options: [{ text: 'Not Sent' }, { text: 'Sent' }],
-        optional: true,
-      },
-    ],
+        options: [{ text: "Not Sent" }, { text: "Sent" }],
+        optional: true
+      }
+    ]
   },
   // {
   //   text: "Violations",
@@ -431,6 +431,6 @@ const CitationsQA = [
   //   ],
   //   optional: true
   // }
-]
+];
 
-export default CitationsQA
+export default CitationsQA;
