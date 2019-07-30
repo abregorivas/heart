@@ -58,7 +58,7 @@ const ParticipantProfile = props => {
             <Grid item xs={12}>
               <Card user={user} />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={12} sm={8}>
               <Notes user={user} />
               <Citations userId={user.id} />
             </Grid>

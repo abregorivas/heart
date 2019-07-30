@@ -1,20 +1,52 @@
 import React, { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
-import { Grid } from '@material-ui/core'
+import {
+  Grid,
+  Card,
+  CardActions,
+  CardContent,
+  makeStyles,
+} from '@material-ui/core'
 import { FormGroup, FormActionBar, EditButton } from '../FormElements'
 import Violations from '../Violations/Violations'
-// import PropTypes from 'prop-types'
+import Search from '../Search/Search'
+import { violationCodes } from '../Violations/violationCodes'
+import ViolationForm from '../Violations/ViolationsForm'
+import Divider from '@material-ui/core/Divider'
+import VirtualizedList from '../Search/VirtualList'
+
+const useStyles = makeStyles(theme => ({
+  citationContainer: {
+    flexGrow: 1,
+    backgroundColor: '#F5F5F5',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
+  card: {
+    padding: 0,
+  },
+  cardContent: {
+    padding: 0,
+  },
+  cardActions: {
+    padding: 0,
+    backgroundColor: '#F5F5F5',
+  },
+  violationContainer: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
+  searchContent: {
+    padding: theme.spacing(2),
+    paddingTop: 0,
+  },
+}))
 
 const CitationForm = ({ initValues, handleDelete, handleSave }) => {
-  const [isEditing, setEdit] = useState(false)
-  let {
-    id,
-    citation_number,
-    court_code,
-    citation_status,
-    violations,
-  } = initValues
-
+  const [violationList, setViolations] = useState(initValues.violations)
+  const [isEditing, setEdit] = useState(true)
+  const classes = useStyles()
+  let { id, citation_number, court_code, citation_status } = initValues
   const toggleEdit = () => setEdit(!isEditing)
   const handleCancel = cb => {
     toggleEdit()
@@ -23,7 +55,17 @@ const CitationForm = ({ initValues, handleDelete, handleSave }) => {
 
   const handleFormSubmit = values => {
     toggleEdit()
-    handleSave(values)
+    let submittedValues = { ...values, violations: violationList }
+    handleSave(submittedValues)
+  }
+
+  const handleViolationSelection = val => {
+    if (violationList.length > 0 && violationList.length <= 5) {
+      setViolations(prevList => {
+        const list = [...violationList, val]
+        return list
+      })
+    }
   }
 
   return (
@@ -34,16 +76,9 @@ const CitationForm = ({ initValues, handleDelete, handleSave }) => {
         citation_number,
         court_code,
         citation_status,
-        violations,
       }}
       onSubmit={(values, actions) => {
         handleFormSubmit(values)
-        // actions.setSubmitting(true)
-        // setTimeout(() => {
-        //   actions.setSubmitting(false)
-        //   actions.resetForm(initValues)
-        //   // alert(JSON.stringify(values, null, 2));
-        // }, 3000)
       }}
       render={({
         handleSubmit,
@@ -53,44 +88,72 @@ const CitationForm = ({ initValues, handleDelete, handleSave }) => {
         ...props
       }) => (
         <Form>
-          <Grid container spacing={1}>
-            <Grid item xs={12} md={4}>
-              <Field
-                disabled={!isEditing}
-                name="citation_number"
-                label="citation no"
-                component={FormGroup}
-              />
+          <CardContent classes={{ root: classes.cardContent }}>
+            <Grid
+              container
+              spacing={1}
+              justify="space-between"
+              alignItems="center"
+              alignContent="center"
+              className={classes.citationContainer}
+            >
+              <Grid item xs={12} sm={4}>
+                <Field
+                  disabled={!isEditing}
+                  name="citation_number"
+                  label="citation no"
+                  component={FormGroup}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Field
+                  disabled={!isEditing}
+                  name="court_code"
+                  label="court code"
+                  component={FormGroup}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Field
+                  disabled={!isEditing}
+                  name="citation_status"
+                  label="status"
+                  component={FormGroup}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={4}>
-              <Field
-                disabled={!isEditing}
-                name="court_code"
-                label="court code"
-                component={FormGroup}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Field
-                disabled={!isEditing}
-                name="citation_status"
-                label="status"
-                component={FormGroup}
-              />
-            </Grid>
-          </Grid>
-          <Grid container>
-            <Violations isEditing={isEditing} violations={violations} />
-          </Grid>
-          {isEditing ? (
-            <FormActionBar
-              handleDelete={() => handleSubmit}
-              // handleSave={() => handleSubmit}
-              handleCancel={() => handleCancel(handleReset)}
+          </CardContent>
+          <CardContent classes={{ root: classes.violationContainer }}>
+            <Violations
+              isEditing={isEditing}
+              handleSelection={handleViolationSelection}
+              violations={violationList}
             />
-          ) : (
-            <EditButton toggleEdit={toggleEdit} />
-          )}
+          </CardContent>
+          <CardContent classes={{ root: classes.searchContent }}>
+            {isEditing && (
+              <Search
+                disabled={!isEditing}
+                searchList={violationCodes}
+                placeholder="Search Violations"
+                handleSelection={handleViolationSelection}
+              />
+            )}
+          </CardContent>
+          <CardActions classes={{ root: classes.cardActions }}>
+            {isEditing ? (
+              <FormActionBar
+                handleDelete={() => handleSubmit}
+                handleCancel={() => handleCancel(handleReset)}
+              />
+            ) : (
+              <Grid container direction="row-reverse">
+                <Grid item>
+                  <EditButton toggleEdit={toggleEdit} />
+                </Grid>
+              </Grid>
+            )}
+          </CardActions>
         </Form>
       )}
     />
@@ -102,3 +165,67 @@ const CitationForm = ({ initValues, handleDelete, handleSave }) => {
 // }
 
 export default CitationForm
+
+//
+// <Card classes={{ root: classes.card }}>
+// <CardContent classes={{ root: classes.cardContent }}>
+// {/*<div className={classes.citationContainer}>*/}
+//
+// <Grid container className={classes.citationContainer}>
+//   <Grid item md>
+//     <Field
+//       disabled={!isEditing}
+//       name="citation_number"
+//       label="citation no"
+//       component={FormGroup}
+//     />
+//   </Grid>
+//   <Grid item md>
+//     <Field
+//       disabled={!isEditing}
+//       name="court_code"
+//       label="court code"
+//       component={FormGroup}
+//     />
+//   </Grid>
+//   <Grid item md>
+//     <Field
+//       disabled={!isEditing}
+//       name="citation_status"
+//       label="status"
+//       component={FormGroup}
+//     />
+//   </Grid>
+// </Grid>
+// {/*</div>*/}
+//
+// <Violations
+//   isEditing={isEditing}
+//   handleSelection={handleViolationSelection}
+//   violations={violationList}
+// />
+//
+// {isEditing && (
+//   <Search
+//     disabled={!isEditing}
+//     searchList={violationCodes}
+//     placeholder="Search Violations"
+//     handleSelection={handleViolationSelection}
+//   />
+// )}
+// </CardContent>
+// <CardActions className={classes.citationContainer}>
+// {isEditing ? (
+// <FormActionBar
+// handleDelete={() => handleSubmit}
+// handleCancel={() => handleCancel(handleReset)}
+// />
+// ) : (
+// <Grid container direction="row-reverse">
+// <Grid item>
+// <EditButton toggleEdit={toggleEdit} />
+// </Grid>
+// </Grid>
+// )}
+// </CardActions>
+// </Card>

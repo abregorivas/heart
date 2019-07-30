@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     'label + &': {
       marginTop: theme.spacing(3),
+      width: '100%',
     },
   },
   input: {
@@ -22,7 +23,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.common.white,
     border: '1px solid #ced4da',
     fontSize: 16,
-    width: '100%',
   },
 }))
 
@@ -30,6 +30,7 @@ export const BaseInput = ({ field, ...props }) => {
   const classes = useStyles()
   return (
     <InputBase
+      fullWidth={true}
       className={clxs(classes.input, classes.root)}
       {...field}
       {...props}

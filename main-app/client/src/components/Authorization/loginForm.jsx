@@ -1,62 +1,62 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { withRouter, Redirect } from "react-router-dom";
+import React from 'react'
+import PropTypes from 'prop-types'
+import { withRouter, Redirect } from 'react-router-dom'
 
-import { UserAuth } from "../../utilities/auth";
+import { UserAuth } from '../../utilities/auth'
 
-import "./loginForm.scss";
+import './loginForm.scss'
 
 class LoginForm extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       submitted: false,
       loading: false,
       redirectToReferrer: false,
-      error: ""
-    };
+      error: '',
+    }
   }
 
   static propTypes = {
     location: PropTypes.object.isRequired,
-    onNewLogin: PropTypes.func.isRequired
-  };
+    onNewLogin: PropTypes.func.isRequired,
+  }
 
   componentWillMount() {
     // If user is logged in redirect straight to the participants page
-    const res = UserAuth.loggedIn();
+    const res = UserAuth.loggedIn()
     if (res) {
-      this.props.history.push("/");
+      this.props.history.push('/')
     }
   }
 
   handleChange(evt) {
-    const { name, value } = evt.target;
-    this.setState({ [name]: value });
+    const { name, value } = evt.target
+    this.setState({ [name]: value })
   }
 
   handleSubmit(evt) {
-    evt.preventDefault();
+    evt.preventDefault()
 
-    this.setState({ submitted: true });
-    const { username, password } = this.state;
+    this.setState({ submitted: true })
+    const { username, password } = this.state
 
     // stop here if form is invalid
     if (!(username && password)) {
-      return;
+      return
     }
 
-    this.setState({ loading: true });
+    this.setState({ loading: true })
     UserAuth.login(username, password)
       .then(res => {
-        this.props.onNewLogin(res.authToken);
-        this.setState({ error: null, redirectToReferrer: true });
+        this.props.onNewLogin(res.authToken)
+        this.setState({ error: null, redirectToReferrer: true })
       })
       .catch(error => {
-        this.setState({ error, loading: false });
-      });
+        this.setState({ error, loading: false })
+      })
   }
 
   render() {
@@ -66,15 +66,15 @@ class LoginForm extends React.Component {
       submitted,
       loading,
       redirectToReferrer,
-      error
-    } = this.state;
+      error,
+    } = this.state
     const { from } = this.props.location.state || {
-      from: { pathname: "/" }
-    };
+      from: { pathname: '/' },
+    }
 
     if (redirectToReferrer) {
       //this.props.history.push(from);
-      return <Redirect to={from} />;
+      return <Redirect to={from} />
     }
     return (
       <div className="centered-container login-form-container">
@@ -84,10 +84,10 @@ class LoginForm extends React.Component {
           className="login-form"
           onSubmit={evt => this.handleSubmit(evt)}
         >
-          {error && <div className={"alert alert-danger"}>{error}</div>}
+          {error && <div className={'alert alert-danger'}>{error}</div>}
           <div
             className={
-              "form-group" + (submitted && !username ? " has-error" : "")
+              'form-group' + (submitted && !username ? ' has-error' : '')
             }
           >
             <label htmlFor="username">Username</label>
@@ -106,7 +106,7 @@ class LoginForm extends React.Component {
           </div>
           <div
             className={
-              "form-group" + (submitted && !password ? " has-error" : "")
+              'form-group' + (submitted && !password ? ' has-error' : '')
             }
           >
             <label htmlFor="password">Password</label>
@@ -124,14 +124,14 @@ class LoginForm extends React.Component {
             />
           </div>
           <div className="form-group">
-            <button className="btn btn-primary" disabled={loading}>
+            <button className="btn btn-primary login-btns" disabled={loading}>
               Login
             </button>
           </div>
         </form>
       </div>
-    );
+    )
   }
 }
 
-export default withRouter(LoginForm);
+export default withRouter(LoginForm)

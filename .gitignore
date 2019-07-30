@@ -4,3 +4,10 @@ node_modules
 /main-app/api/server/.env
 /.vscode
 /main-app/client/.env
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/heart.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/codeStyles/Project.xml
+/.idea/vcs.xml
+/.idea/workspace.xml

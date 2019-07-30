@@ -6,7 +6,8 @@ import { FormControl, InputLabel } from '@material-ui/core'
 import BaseInput from './BaseInput'
 
 const useStyles = makeStyles(theme => ({
-  margin: {
+  root: {
+    width: '90%',
     margin: theme.spacing(1),
   },
   label: {
@@ -25,25 +26,17 @@ export const FormGroup = ({
   const classes = useStyles()
   // const errmsg = touched[field.name] && errors[field.name]
   return (
-    <div>
-      <FormControl className={classes.margin} component="div">
-        <InputLabel
-          shrink
-          htmlFor={props.id}
-          className={classes.label}
-          // error={!!errmsg}
-        >
-          {label}
-        </InputLabel>
-        <Field
-          id={id}
-          label={label}
-          {...props}
-          component={BaseInput}
-          disabled={props.disabled}
-        />
-      </FormControl>
-    </div>
+    <FormControl className={classes.root} component="div" fullWidth={true}>
+      <InputLabel
+        shrink
+        htmlFor={props.id}
+        className={classes.label}
+        // error={!!errmsg}
+      >
+        {label}
+      </InputLabel>
+      <BaseInput field={props.field} {...props} />
+    </FormControl>
   )
 }
 

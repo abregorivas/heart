@@ -28,6 +28,7 @@
     "react-scripts": "^3.0.1",
     "react-select": "^2.1.2",
     "react-test-renderer": "^16.7.0",
+    "react-window": "^1.8.5",
     "source-map-explorer": "^2.0.1",
     "styled-components": "^4.2.0",
     "validator": "^10.11.0"

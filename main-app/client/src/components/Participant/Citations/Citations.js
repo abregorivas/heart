@@ -48,7 +48,6 @@ export const Citations = ({ userId }) => {
     <Container className={classes.root}>
       <SectionHeading>Citations</SectionHeading>
       {isLoading ? 'Loading...' : renderCitations()}
-      {JSON.stringify(data)}
     </Container>
   )
 }
@@ -58,3 +57,4 @@ Citations.propTypes = {
 }
 
 export default Citations
+// {JSON.stringify(data)}

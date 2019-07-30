@@ -20,7 +20,7 @@ const updateCitation = ({ id, data, citationId }, successFn, errorFn) => {
       config
     )
     .then(res => {
-      successFn(res.data)
+      // successFn(res.data)
       return res.data
     })
     .catch(err => {
@@ -29,7 +29,7 @@ const updateCitation = ({ id, data, citationId }, successFn, errorFn) => {
       if (err.code === 'ECONNABORTED') {
         message = 'The request took too long - please try again later.'
       }
-      errorFn(message)
+      // errorFn(message)
       return err
     })
 }
